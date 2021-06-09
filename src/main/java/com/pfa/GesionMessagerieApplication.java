@@ -15,14 +15,7 @@ private MailService mailService;
 	}
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
-		/*try {
-			
-		mailService.send("kais2032@gmail.com", "2032kais@gmail.com", "heloo koko", "howareyou");	
-		System.out.println("Done");
-		}catch (Exception e) {
-			// TODO: handle exception
-		}*/
+	
 	}
 
 }

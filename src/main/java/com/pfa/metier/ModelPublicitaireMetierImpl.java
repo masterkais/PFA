@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -20,8 +21,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.pfa.dao.CategorieRepository;
+import com.pfa.dao.ClientRepository;
+import com.pfa.dao.ImageRepository;
+import com.pfa.dao.Ligne_M_CRepository;
 import com.pfa.dao.ModelPublicitaireRepository;
 import com.pfa.entities.Client;
+import com.pfa.entities.Image;
+import com.pfa.entities.Ligne_M_C;
 import com.pfa.entities.ModelPublicitaire;
 import com.pfa.entities.Utilisateur;
 
@@ -33,6 +39,17 @@ ModelPublicitaireRepository modelPublicitaireRepository;
 CategorieRepository categorieRepository;
 @Autowired
 JavaMailSender javaMailSender;
+@Autowired
+ImageRepository imageRepository;
+@Autowired
+ClientRepository clientRepository;
+@Autowired
+Ligne_M_CRepository ligne_M_CRepository;
+static int randomOneOrMinusOne() {
+    Random rand = new Random();
+    if (rand.nextBoolean()) return 1;
+    else return -1;
+}
 @Override
 public ModelPublicitaire EnregistrerModel(ModelPublicitaire c) {
 	// TODO Auto-generated method stub
@@ -64,13 +81,13 @@ public String supprimerModel(Long id) {
 }
 
 @Override
-public ModelPublicitaire modifierModel(Long id,Date dateCreation,Date dateEnvoie,String encodageTemplate,String nameTemplate,Long id_cat) {
+public ModelPublicitaire modifierModel(Long id,Date dateCreation,String encodageTemplate,String nameTemplate,Long id_cat) {
 	// TODO Auto-generated method stub
 ModelPublicitaire p=modelPublicitaireRepository.findById(id).get();
 p.setDateCreation(dateCreation);
-p.setDateenvoie(dateEnvoie);
+
 p.setEncodageTemplate(encodageTemplate);
-p.setNameTempate(nameTemplate);
+p.setNameTemplate(nameTemplate);
 p.setCategorie(categorieRepository.findById(id_cat).get());
 return modelPublicitaireRepository.save(p);
 }
@@ -89,7 +106,7 @@ public String EnvoieModel(Client c, Utilisateur u, ModelPublicitaire m) {
      // Sender's email ID needs to be mentioned
      String from = u.getEmail();
      final String username = u.getEmail();//change accordingly
-     final String password = "110543072032@@";//change accordingly
+     final String password = "1105430724811435@";//change accordingly
      // Assuming you are sending email through relay.jangosmtp.net
      String host = "smtp.gmail.com";
 
@@ -116,7 +133,7 @@ public String EnvoieModel(Client c, Utilisateur u, ModelPublicitaire m) {
            InternetAddress.parse(to));
 
 	   // Set Subject: header field
-	   message.setSubject(m.getNameTempate());
+	   message.setSubject(m.getNameTemplate());
 
 	   // Send the actual HTML message, as big as you like
 	   message.setContent(
@@ -152,7 +169,7 @@ public String EnvoieModelHtmlETtImage(Client c, Utilisateur u, ModelPublicitaire
 		helper.setText(m.getEncodageTemplate(), true); // true indicaes html
 		// continue using helper object for more functionalities like adding attachments, etc.  
 		
-		FileSystemResource f=new FileSystemResource("C:\\Users\\ASUS\\Desktop\\GG.png");
+		FileSystemResource f=new FileSystemResource("C:/Users/ASUS/Desktop/GG.png");
 		helper.addAttachment("GG.png",f);
 		//message.addHeader ( "Disposition-Notification-To" , "kais2032@gmail.com" ) ;
 		
@@ -183,7 +200,7 @@ public String EnvoieModelToMultipleClient(List<Client> lc, Utilisateur u, ModelP
     // Sender's email ID needs to be mentioned
     String from = u.getEmail();
     final String username = u.getEmail();//change accordingly
-    final String password = "110543072032@@";//change accordingly
+    final String password = "1105430724811435@";//change accordingly
     // Assuming you are sending email through relay.jangosmtp.net
     String host = "smtp.gmail.com";
 
@@ -207,6 +224,11 @@ public String EnvoieModelToMultipleClient(List<Client> lc, Utilisateur u, ModelP
     	for(int i=0;i<lmail.size();i++) {
     		SendThread s=new SendThread(lmail.get(i), from, session, m);
     		s.start();
+    	 	List<Client> c=clientRepository.getClientByEmail(lmail.get(i));
+          
+            
+        	Ligne_M_C lmm=new Ligne_M_C(c.get(0),m,randomOneOrMinusOne());
+        		Ligne_M_C lm=ligne_M_CRepository.save(lmm);
         
          	}
     } catch(Exception e) {
@@ -216,4 +238,29 @@ public String EnvoieModelToMultipleClient(List<Client> lc, Utilisateur u, ModelP
 	return "Votre message a été envoyé avec succée";
 }
 
+@Override
+public Image GetImageByPath(String path) {
+	// TODO Auto-generated method stub
+	return imageRepository.getImageByPah(path);
+}
+@Override
+public Image EnregistrerImage(Image i) {
+	// TODO Auto-generated method stub
+	return imageRepository.save(i);
+}
+
+@Override
+public Image GetImageByName(String name) {
+	System.out.println("dans metierim getImagebyname"+name);
+	// TODO Auto-generated method stub
+	return imageRepository.getImageByname(name);
+}
+@Override
+public void ModifierDateEnvoi(Long id,Date d) {
+	ModelPublicitaire p=modelPublicitaireRepository.findById(id).get();
+p.setDateenvoie(new Date());
+
+	 modelPublicitaireRepository.save(p);
+	
+}
 }

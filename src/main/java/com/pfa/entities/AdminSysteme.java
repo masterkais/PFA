@@ -9,8 +9,8 @@ import javax.persistence.Entity;
 @DiscriminatorValue("AS")
 public class AdminSysteme extends Utilisateur {
 	private int adminSysteme  ;
-	public AdminSysteme(String nom, String prenom, String login, String password, String email,int adminSysteme ) {
-		super(nom, prenom, login, password, email);
+	public AdminSysteme(String nom, String prenom, String login, String password, String email,int adminSysteme,GlobalAdmin g ) {
+		super(nom, prenom, login, password, email, g);
 		this.adminSysteme=1;
 	}
 	public AdminSysteme() {
