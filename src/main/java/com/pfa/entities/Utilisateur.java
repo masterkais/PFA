@@ -18,13 +18,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.pfa.dao.GlobalAdminRepository;
-import com.pfa.dao.UtilisateurRepository;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 
@@ -38,7 +34,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 	@Type(name = "SA",value = SimpleAdmin.class)
 })
 public class Utilisateur implements Serializable {
-
 @Id
 @GeneratedValue(strategy=GenerationType.AUTO)
 private Long id_user;
@@ -58,14 +53,13 @@ public Utilisateur() {
 	super();
 }
 
-public Utilisateur(String nom, String prenom, String login, String password, String email,GlobalAdmin g) {
+public Utilisateur(String nom, String prenom, String login, String password, String email) {
 	super();
 	this.nom = nom;
 	this.prenom = prenom;
 	this.login = login;
 	this.password = password;
 	this.email = email;
-this.globalAdmin=g;
 }
 
 public String getNom() {
@@ -102,7 +96,7 @@ public void setEmail(String email) {
 public GlobalAdmin getGlobalAdmin() {
 	return globalAdmin;
 }
-
+@JsonIgnore
 public void setGlobalAdmin(GlobalAdmin globalAdmin) {
 	this.globalAdmin = globalAdmin;
 }
