@@ -1,11 +1,9 @@
 package com.pfa.services;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,37 +50,4 @@ public Client ModifierClient(@RequestParam Long id,
 public Client getClient(@PathVariable Long code) {
 	return clientMetier.getClient(code);
 }
-/**/
-
-@RequestMapping(value = "/clients/{noms}/{prenoms}/{tels}/{emails}/{dateNess}/{payes}/{regions}/{villes}/{sexes}",method = RequestMethod.POST)
-public List<Client> EnregitrerLidtClient(@PathVariable List<String> noms,
-		@PathVariable List<String> prenoms,
-		@PathVariable List<String> tels,
-		@PathVariable List<String> emails,
-		@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<Date> dateNess,
-		@PathVariable List<String> payes,
-		@PathVariable List<String> regions,
-		@PathVariable List<String> villes,
-		@PathVariable List<String> sexes) {
-	List<Client> lc=new ArrayList<Client>();
-	for(int i=0;i<noms.size();i++) {
-		 String nom=noms.get(i);
-		 String prenom=prenoms.get(i);
-		 String tel=tels.get(i);
-		 String email=emails.get(i);
-		 System.out.println("********************"+dateNess.get(i));
-		 Date dateNes=dateNess.get(i);
-		
-		 String paye=payes.get(i);
-		 String region=regions.get(i);
-		 String ville=villes.get(i);
-		 String sexe=sexes.get(i);
-	 Client c=new Client(nom, prenom, tel, email, dateNes, paye, region, ville, sexe);
-	 lc.add(c);
-	 clientMetier.EnregistrerClient(c);
-	}
-	return lc ;
-}
-
-
 }
