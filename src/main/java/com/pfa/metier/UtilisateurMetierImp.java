@@ -30,15 +30,6 @@ GlobalAdminRepository globalAdminRepository;
 	@Override
 	public Utilisateur EnregistrerUtilisateur(Utilisateur c) {
 		// TODO Auto-generated method stub
-		String password=c.getPassword();
-		String ch="";
-		char[] chars=password.toCharArray();
-		for(char k : chars) {
-		k+=5;
-		ch+=k;
-		}
-		c.setPassword(ch);
-	
 		c.setGlobalAdmin(null);
 		return utilisateurRepository.save(c);
 	}

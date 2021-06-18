@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +47,7 @@ public class ModelPublicitaireRestService {
 	 * *******************
 	 */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "modelPublicitaires/{ls}", method = RequestMethod.POST)
 	public ModelPublicitaire EnregistrerModel(ModelPublicitaire c, @RequestParam Long id_cat,
 			@PathVariable List<String> ls) {
@@ -63,9 +66,10 @@ public class ModelPublicitaireRestService {
 	}
 
 	/* model publicitaire save sans images */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "modelPublicitaires", method = RequestMethod.POST)
-	public ModelPublicitaire EnregistrerModelV2(ModelPublicitaire c, @RequestParam Long id_cat) {
-		Categorie k = categorieMetier.getCategorie(id_cat);
+	public ModelPublicitaire EnregistrerModelV2(@RequestBody ModelPublicitaire c) {
+		Categorie k = categorieMetier.getCategorie((long) 16);
 		c.setCategorie(k);
 		c.setLm(null);
 		return modelPublicitaireMetier.EnregistrerModel(c);
@@ -73,6 +77,7 @@ public class ModelPublicitaireRestService {
 
 	/* LISTER TOUS LES model qui existe */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "modelPublicitaires", method = RequestMethod.GET)
 	public List<ModelPublicitaire> listModel() {
 		return modelPublicitaireMetier.listModel();
@@ -80,6 +85,7 @@ public class ModelPublicitaireRestService {
 
 	/* get un Model par id ******passer l'id de model dans le path**** */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "modelPublicitaires/{id}", method = RequestMethod.GET)
 	public ModelPublicitaire getModel(@PathVariable Long id) {
 		return modelPublicitaireMetier.getModel(id);
@@ -87,6 +93,7 @@ public class ModelPublicitaireRestService {
 
 	/* supprimer un Model par id ******passer l'id de model dans le path**** */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "modelPublicitaires/{id}", method = RequestMethod.DELETE)
 	public String supprimerModel(@PathVariable Long id) {
 		modelPublicitaireMetier.supprimerModel(id);
@@ -100,6 +107,7 @@ public class ModelPublicitaireRestService {
 
 	/* NB ****passe l'id de model dans le ******bodyparam******** */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "modelPublicitaires", method = RequestMethod.PUT)
 	public ModelPublicitaire modifierModel(@RequestParam Long id, @RequestParam Date dateCreation,
 			@RequestParam String EncodageTemplate, @RequestParam String nameTemplate, @RequestParam Long id_cat) {
@@ -111,6 +119,7 @@ public class ModelPublicitaireRestService {
 	 * path params
 	 */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/modelPublicitaireByName/{nom}", method = RequestMethod.GET)
 	public List<ModelPublicitaire> getModelByNom(@PathVariable String nom) {
 		return modelPublicitaireMetier.getModelByNom(nom);
@@ -122,6 +131,7 @@ public class ModelPublicitaireRestService {
 	 * id utilisateur et id model publicitaire et id de client dans le bodyparams
 	 */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/modelPublicitairesEnvoie", method = RequestMethod.POST)
 	public String envoieModel(@RequestParam Long id_c, @RequestParam Long id_u, @RequestParam Long id_m) {
 		Utilisateur u = utilisateurMetier.getUtilisateur(id_u);
@@ -141,6 +151,7 @@ public class ModelPublicitaireRestService {
 	 * id utilisateur et id model publicitaire dans le bodyparams
 	 */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/modelPublicitairesEnvoieAllClient", method = RequestMethod.POST)
 	public String envoieModelMultiple(@RequestParam Long id_u, @RequestParam Long id_m) {
 		System.out.println("************************************************");
@@ -165,6 +176,7 @@ public class ModelPublicitaireRestService {
 	/* passer une list des id de clients dans le pathparam */
 	/* passer id_utilisateur et id_model dans le bodyparam */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/modelPublicitairesEnvoieClientByCategorie/{lsIdc}", method = RequestMethod.POST)
 	public String envoieModelMultipleByCategorie(@RequestParam Long id_u, @RequestParam Long id_m,
 			@PathVariable List<Long> lsIdc) {
@@ -182,6 +194,7 @@ public class ModelPublicitaireRestService {
 
 	/* pas important */
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/modelPublicitairesHtmlImageEnvoie", method = RequestMethod.POST)
 	public String envoieModelHtmlImage(@RequestParam Long id_c, @RequestParam Long id_u, @RequestParam Long id_m) {
 		Utilisateur u = utilisateurMetier.getUtilisateur(id_u);
