@@ -18,4 +18,12 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 	@Query("select o from Utilisateur o where o.login=:x and o.password=:y")
 	public Utilisateur getUtilisateurByLoginAndPassword(@Param("x") String x,@Param("y") String y);
 	
+	
+	@Query("select o from Utilisateur o where o.email=:email")
+	public Utilisateur getUtilisateurByEmail(@Param("email") String email);
+	
+	
+	@Query("select o from Utilisateur o where o.login=:login")
+	public Utilisateur getUtilisateurByLogin(@Param("login") String login);
+	
 }

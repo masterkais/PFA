@@ -3,6 +3,7 @@ package com.pfa.entities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,10 +23,12 @@ public class ModelPublicitaire implements Serializable {
 @Id 
 @GeneratedValue(strategy=GenerationType.AUTO)
 private Long id;
-private String nameTempate;
+private String nameTemplate;
 private Date dateCreation;
 private Date dateenvoie;
 private String EncodageTemplate;
+@ManyToMany(mappedBy = "modelPublicitaires")
+private Collection<Image> lm;
 @OneToMany(mappedBy = "model",fetch=FetchType.LAZY)
 private Collection<Ligne_M_C> ligneMC;
 @ManyToMany(mappedBy = "modelPublicitaires")
@@ -33,22 +36,42 @@ private Collection<Utilisateur> users;
 @ManyToOne(cascade = CascadeType.ALL)
 @JoinColumn(name = "ID_CAT")  
 private Categorie categorie;
-public ModelPublicitaire(String nameTempate, Date dateCreation, Date dateenvoie, String encodageTemplate
-		) {
-	super();
-	this.nameTempate = nameTempate;
-	this.dateCreation = dateCreation;
-	this.dateenvoie = dateenvoie;
-	EncodageTemplate = encodageTemplate;
-	
-	
-}
-
 public ModelPublicitaire() {
 	super();
 
 }
+public ModelPublicitaire(String nameTemplate, Date dateCreation, Date dateenvoie, String encodageTemplate,
+		Collection<Image> lm, Collection<Ligne_M_C> ligneMC, Collection<Utilisateur> users, Categorie categorie) {
+	super();
+	this.nameTemplate = nameTemplate;
+	this.dateCreation = dateCreation;
+	this.dateenvoie = dateenvoie;
+	EncodageTemplate = encodageTemplate;
+	this.lm = lm;
+	this.ligneMC = ligneMC;
+	this.users = users;
+	this.categorie = categorie;
+}
 
+public ModelPublicitaire(String nameTemplate, Date dateCreation, String encodageTemplate,
+		Collection<Image> lm, Collection<Ligne_M_C> ligneMC, Collection<Utilisateur> users, Categorie categorie) {
+	super();
+	this.nameTemplate = nameTemplate;
+	this.dateCreation = dateCreation;
+	EncodageTemplate = encodageTemplate;
+	this.lm = lm;
+	this.ligneMC = ligneMC;
+	this.users = users;
+	this.categorie = categorie;
+}
+
+public String getNameTemplate() {
+	return nameTemplate;
+}
+
+public void setNameTemplate(String nameTemplate) {
+	this.nameTemplate = nameTemplate;
+}
 public Categorie getCategorie() {
 	return categorie;
 }
@@ -63,12 +86,7 @@ public Long getId() {
 public void setId(Long id) {
 	this.id = id;
 }
-public String getNameTempate() {
-	return nameTempate;
-}
-public void setNameTempate(String nameTempate) {
-	this.nameTempate = nameTempate;
-}
+
 public Date getDateCreation() {
 	return dateCreation;
 }
@@ -100,5 +118,13 @@ public Collection<Utilisateur> getUsers() {
 }
 public void setUsers(Collection<Utilisateur> users) {
 	this.users = users;
+}
+@JsonIgnore
+public Collection<Image> getLm() {
+	return this.lm;
+}
+
+public void setLm(Collection<Image> image) {
+	this.lm = image;
 }
 }
